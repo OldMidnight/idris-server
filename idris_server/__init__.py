@@ -1,10 +1,9 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 import logging, os
 from http.client import HTTPConnection
 from logging.config import dictConfig
 from flask.logging import default_handler
 from idris_server.endpoints import location, status
-
 
 dictConfig({
     'version': 1,
@@ -33,12 +32,11 @@ def create_app():
 
   app = Flask(__name__)
   if os.environ['FLASK_ENV'] == "development":
-    app.config.from_object('config.DevConfig')
+    app.config.from_object('idris_server.config.DevConfig')
     app.logger.info("Starting Education with DevConfig...")
   else:
-    app.config.from_object('config.ProdConfig')
+    app.config.from_object('idris_server.config.ProdConfig')
     app.logger.info('Starting Education with ProdConfig...')
-  app.config.from_object('config')
 
   # register blueprints
   app.register_blueprint(location.bp)
